@@ -18,7 +18,8 @@ namespace Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            //base.OnModelCreating(modelBuilder);
+            //modelBuilder.Seed();
         }
 
         public DbSet<Property> Properties { get; set; }
