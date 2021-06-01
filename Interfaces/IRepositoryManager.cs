@@ -8,6 +8,7 @@ namespace Interfaces
 {
     public interface IRepositoryManager
     {
-
+        IPropertyRepository Property { get; }
+        void Save();
     }
 }
