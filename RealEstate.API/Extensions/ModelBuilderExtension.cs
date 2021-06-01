@@ -10,6 +10,8 @@ namespace RealEstate.API.Extensions
 {
     public static class ModelBuilderExtension
     {
+
+        //Seed Data
         public static void Seed(this ModelBuilder modelBuilder)
         {
 
