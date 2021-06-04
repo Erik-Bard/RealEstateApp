@@ -1,4 +1,5 @@
 ﻿using Entities;
+using IdentityLibrary;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -21,5 +22,11 @@ namespace RealEstate.API.Extensions
 
         public static void ConfigureRepositoryManager(this IServiceCollection services) =>
             services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+        public static void ConfigureIdentityDbSqlConnection(this IServiceCollection services,
+            IConfiguration configuration) =>
+                services.AddDbContext<ApplicationDbContext>(opt =>
+                    opt.UseSqlServer(configuration.GetConnectionString("sqlDbConnection"), b =>
+                    b.MigrationsAssembly("RealEstate.API")));
     }
 }

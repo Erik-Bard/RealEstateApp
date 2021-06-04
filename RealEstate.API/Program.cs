@@ -1,5 +1,8 @@
 using Entities;
+using IdentityLibrary;
+using IdentityLibrary.Authentication;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,11 +31,27 @@ namespace RealEstate.API
             {
                 try
                 {
-                    var context = scope.ServiceProvider.GetService<RepositoryContext>();
+                    //var context = scope.ServiceProvider.GetService<RepositoryContext>();
+                    //var identityContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                    //context.Database.EnsureDeleted();
+                    //context.Database.Migrate();
+                    //identityContext.Database.EnsureDeleted();
+                    //identityContext.Database.Migrate();
 
-                    context.Database.EnsureDeleted();
-                    context.Database.Migrate();
-                    
+                    var services = scope.ServiceProvider;
+                    var UserContext = services.GetRequiredService<ApplicationDbContext>();
+                    RepositoryContext hotelContext = scope.ServiceProvider.GetService<RepositoryContext>();
+                    //If database doesent exist, run the seeder from movieservice
+                    bool DatabaseDoesNotExist = hotelContext.Database.EnsureCreated();
+
+                    if (!UserContext.Database.EnsureCreated())
+                    {
+                        UserContext.Database.Migrate();
+                        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                    }
+
+
                 }
                 catch (Exception ex)
                 {
