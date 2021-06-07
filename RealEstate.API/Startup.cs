@@ -34,8 +34,11 @@ namespace RealEstate.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureSqlConnection(Configuration);
+            services.ConfigureLoggerService();
             services.ConfigureIdentityDbSqlConnection(Configuration);
             services.ConfigureRepositoryManager();
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();

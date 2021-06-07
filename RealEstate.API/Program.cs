@@ -18,40 +18,24 @@ namespace RealEstate.API
 {
     public class Program
     {
-        //public static void Main(string[] args)
-        //{
-        //    CreateHostBuilder(args).Build().Run();
-        //}
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-
-            // migrate the database.  Best practice = in Main, using service scope
             using (var scope = host.Services.CreateScope())
             {
                 try
                 {
-                    //var context = scope.ServiceProvider.GetService<RepositoryContext>();
-                    //var identityContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
-                    //context.Database.EnsureDeleted();
-                    //context.Database.Migrate();
-                    //identityContext.Database.EnsureDeleted();
-                    //identityContext.Database.Migrate();
-
                     var services = scope.ServiceProvider;
                     var UserContext = services.GetRequiredService<ApplicationDbContext>();
                     RepositoryContext hotelContext = scope.ServiceProvider.GetService<RepositoryContext>();
-                    //If database doesent exist, run the seeder from movieservice
+                    //If database doesent exist, run the seeder
                     bool DatabaseDoesNotExist = hotelContext.Database.EnsureCreated();
-
                     if (!UserContext.Database.EnsureCreated())
                     {
                         UserContext.Database.Migrate();
                         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     }
-
-
                 }
                 catch (Exception ex)
                 {
@@ -59,8 +43,6 @@ namespace RealEstate.API
                     logger.LogError(ex, "An error occurred while migrating the database.");
                 }
             }
-
-            // run the web app
             host.Run();
         }
 

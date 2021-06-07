@@ -1,6 +1,7 @@
 ﻿using Entities;
 using IdentityLibrary;
 using Interfaces;
+using LoggerServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,9 @@ namespace RealEstate.API.Extensions
                 services.AddDbContext<RepositoryContext>(opt =>
                     opt.UseSqlServer(configuration.GetConnectionString("sqlDbConnection"), a =>
                     a.MigrationsAssembly("RealEstate.API")));
+
+        public static void ConfigureLoggerService(this IServiceCollection services) =>
+            services.AddScoped<ILoggerManager, LoggerManager>();
 
         public static void ConfigureRepositoryManager(this IServiceCollection services) =>
             services.AddScoped<IRepositoryManager, RepositoryManager>();
