@@ -11,11 +11,11 @@ namespace Entities.DataTransferObjects
     {
         public string Title { get; set; }
         public string Description { get; set; }
+        public string Address { get; set; }
+        public string Contact { get; set; }
+        public int YearOfConstruction { get; set; }
         public int SellingPrice { get; set; }
         public int RentingPrice { get; set; }
-        public string Contact { get; set; }
         public PropertyType PropertyType { get; set; }
-        public AdvertismentType AdvertismentType { get; set; }
-        public int PropertyId { get; set; }
     }
 }

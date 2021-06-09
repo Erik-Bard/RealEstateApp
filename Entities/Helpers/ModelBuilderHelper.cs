@@ -81,27 +81,27 @@ namespace RealEstate.API.Extensions
                 });
 
             modelBuilder.Entity<Comment>().HasData(
-            new Comment
-            {
-                Id = new Guid("7e5d5379-9f9e-4bf6-9744-7623008c998d"),
-                CreatedOn = DateTime.Now,
-                PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
-                Content = "Dålig utsikt!!",
-            },
-            new Comment
-            {
-                Id = new Guid("78591990-5d89-4aa5-aaed-345505bdd1c3"),
-                CreatedOn = DateTime.Now,
-                PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
-                Content = "Väldigt fint läge.",
-            },
-            new Comment
-            {
-                Id = new Guid("7e6d5379-9f9e-4bf6-9744-7623008c943e"),
-                CreatedOn = DateTime.Now,
-                PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
-                Content = "Bra pris.",
-            });
+                new Comment
+                {
+                    Id = new Guid("7e5d5379-9f9e-4bf6-9744-7623008c998d"),
+                    CreatedOn = DateTime.Now,
+                    PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
+                    Content = "Dålig utsikt!!",
+                },
+                new Comment
+                {
+                    Id = new Guid("78591990-5d89-4aa5-aaed-345505bdd1c3"),
+                    CreatedOn = DateTime.Now,
+                    PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
+                    Content = "Väldigt fint läge.",
+                },
+                new Comment
+                {
+                    Id = new Guid("7e6d5379-9f9e-4bf6-9744-7623008c943e"),
+                    CreatedOn = DateTime.Now,
+                    PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
+                    Content = "Bra pris.",
+                });
 
         }
     }

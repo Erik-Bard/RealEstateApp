@@ -71,17 +71,40 @@ namespace RealEstate.API.Controllers
         }
 
         //[Authorize]
-        //[HttpPost]
-        //public IActionResult CreateAdvertisment([FromBody] AdvertismentCreationDto advertisment)
-        //{
-           
-        //}
+        [HttpPost]
+        public IActionResult CreateAdvertisment([FromBody] AdvertismentCreationDto advertisment)
+        {
+            if(advertisment == null)
+            {
+                _logger.Error("Object is null");
+                return BadRequest("Object Is Null.");
+            }
+
+            // Add the property to db
+            var propertyEntity = _mapper.Map<Property>(advertisment);
+            _repositoryAccess.Property.CreateProperty(propertyEntity);
+            
+            //Add the advertisment to db.
+            var advertismentEntity = _mapper.Map<Advertisment>(advertisment);
+            Guid id = Guid.NewGuid();
+            advertismentEntity.CanBeSold = true;
+            advertismentEntity.CanBeRented = true;
+            advertismentEntity.PropertyId = propertyEntity.Id;
+
+            _repositoryAccess.Advertisment.CreateAdvertisment(advertismentEntity);
+            _repositoryAccess.Save();
+
+            var returnModel = _mapper.Map<AdvertismentResponseDto>(advertismentEntity);
+
+            return Ok(returnModel);
+
+        }
 
         //[HttpGet("SkipTake")]
         //[AllowAnonymous]
         //public async Task<ActionResult> RetrieveAdvertismentSkipTake(Guid id)
         //{
-            
+
         //}
     }
 }
