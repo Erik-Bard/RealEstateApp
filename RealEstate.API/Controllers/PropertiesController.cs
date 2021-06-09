@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace RealEstate.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/RealEstates")]
     [ApiController]
     public class PropertiesController : ControllerBase
     {
@@ -42,9 +42,9 @@ namespace RealEstate.API.Controllers
         {
             var properties = _repositoryAccess.Property.GetProperty(id, trackChanges: false);
 
-            if (properties == null)
+            if (properties != null)
             {
-                var propertiesDto = _mapper.Map<IEnumerable<PropertyDto>>(properties);
+                var propertiesDto = _mapper.Map<PropertyDto>(properties);
                 return Ok(propertiesDto);
             }
             else
@@ -74,6 +74,17 @@ namespace RealEstate.API.Controllers
             return CreatedAtRoute("PropertyById",
                 new { id = propertyToReturn.Id },
                 propertyToReturn);
+        }
+
+        [HttpGet("SkipTake")]
+        [AllowAnonymous]
+        public async Task<ActionResult> RetrievePropertiesSkipTake(Guid id)
+        {
+            var property = _repositoryAccess.Property.GetProperty(id, trackChanges: false);
+
+            await Task.CompletedTask;
+
+            return Ok(property);
         }
     }
 }

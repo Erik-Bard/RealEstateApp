@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using RealEstate.API.Extensions;
 using System;
 using System.Collections.Generic;
@@ -49,6 +50,20 @@ namespace RealEstate.API
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
                 {
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                        {
+                            // get user from database and check if authorized.
+                            var userMachine = context.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
+                            var user = userMachine.GetUserAsync(context.HttpContext.User);
+                            if (user == null)
+                            {
+                                context.Fail("Unauthorized");
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                     options.SaveToken = true;
                     options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = new TokenValidationParameters()
@@ -62,6 +77,10 @@ namespace RealEstate.API
                 });
 
             services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealEstate.API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +89,8 @@ namespace RealEstate.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RealEstate.API v1"));
             }
 
             app.UseHttpsRedirection();

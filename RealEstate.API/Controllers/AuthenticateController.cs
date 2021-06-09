@@ -1,7 +1,9 @@
-﻿using IdentityLibrary.API_Requests;
+﻿using IdentityLibrary;
+using IdentityLibrary.API_Requests;
 using IdentityLibrary.Authentication;
 using IdentityLibrary.Models;
 using IdentityLibrary.Roles;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +19,15 @@ using System.Threading.Tasks;
 
 namespace RealEstate.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/account")]
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext dbContext;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
         public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
@@ -121,6 +125,41 @@ namespace RealEstate.API.Controllers
             }
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+        }
+
+        [HttpPost("token")]
+        [AllowAnonymous]
+        public async Task<ActionResult> GetToken([FromBody] LoginModel loginModel)
+        {
+            var user = dbContext.Users.FirstOrDefault(x => x.UserName == loginModel.Username);
+            if (user != null)
+            {
+                var signInResult = await signInManager.CheckPasswordSignInAsync(user, loginModel.Password, false);
+                if (signInResult.Succeeded)
+                {
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var key = Encoding.ASCII.GetBytes("MIN_STORA_HEMLIGA_NYCKEL_UJHJHGlkhjjghjvikh6543 / &%");
+                    var tokenDescriptor = new SecurityTokenDescriptor
+
+                    {
+                        Subject = new ClaimsIdentity(new Claim[]
+                    {
+                    new Claim(ClaimTypes.Name, loginModel.Username)
+                    }),
+                        Expires = DateTime.UtcNow.AddDays(1),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                    };
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+                    var tokenString = tokenHandler.WriteToken(token);
+
+                    return Ok(new { Token = tokenString });
+                }
+                else
+                {
+                    return Ok("Failed, try again.");
+                }
+            }
+            return Ok("Failed, try again.");
         }
     }
 }
