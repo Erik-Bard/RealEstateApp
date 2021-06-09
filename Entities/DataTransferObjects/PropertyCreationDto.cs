@@ -8,7 +8,7 @@ namespace Entities.DataTransferObjects
 {
     public class PropertyCreationDto
     {
-        public int YearOfConstruction { get; set; }
+        public int ConstructionYear { get; set; }
         public string Address { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Entities.EnumHelpers;
 using Entities.Models;
 
-namespace Entities.Helpers
+namespace Entities.Models
 {
     public class Advertisment
     {
@@ -19,6 +19,7 @@ namespace Entities.Helpers
         [MinLength(10)]
         [MaxLength(1000)]
         [Required(ErrorMessage = "Description is required for this advertisment.")]
+        public DateTime CreatedOn { get; set; }
         public string Description { get; set; }
         public int SellingPrice { get; set; }
         public int RentingPrice { get; set; }
@@ -27,8 +28,9 @@ namespace Entities.Helpers
         [Required(ErrorMessage = ("Please enter a valid property type for this advertisment."))]
         public PropertyType PropertyType { get; set; }
         [Required(ErrorMessage = ("Please enter a valid advertisment type for this advertisment."))]
-        public AdvertismentType AdvertismentType { get; set; }
-
-        public List<Property> properties;
+        public bool CanBeSold { get; set; }
+        public bool CanBeRented { get; set; }
+        public Guid PropertyId { get; set; }
+        public Property Property { get; set; }
     }
 }

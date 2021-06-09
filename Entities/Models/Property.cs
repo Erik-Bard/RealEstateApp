@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Entities.Helpers;
+
 
 namespace Entities.Models
 {
@@ -16,8 +16,7 @@ namespace Entities.Models
         public int YearOfConstruction { get; set; }
         [Required(ErrorMessage = "An address is required for this property.")]
         public string Address { get; set; }
-        public Guid AdvertismentId { get; set; }
-        public Advertisment Advertisment { get; set; }
+        public Advertisment Advertisment { get; set; }       
         public List<Comment> Comments { get; set; }
     }
 }

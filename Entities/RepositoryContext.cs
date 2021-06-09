@@ -1,5 +1,4 @@
-﻿using Entities.Helpers;
-using Entities.Models;
+﻿using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using RealEstate.API.Extensions;
 using System;
@@ -26,6 +25,7 @@ namespace Entities
 
         public DbSet<Property> Properties { get; set; }
         public DbSet<Advertisment> Advertisments { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         
     }
 }
