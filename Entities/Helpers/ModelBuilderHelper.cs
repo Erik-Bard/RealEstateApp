@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RealEstate.API.Extensions
 {
-    public static class ModelBuilderExtension
+    public static class ModelBuilderHelper
     {
 
         //Seed Data
@@ -52,7 +52,7 @@ namespace RealEstate.API.Extensions
                 {
                     Id = new Guid("7e6d5379-9f9e-4bf6-9744-7623008c943e"),
                     Title = "Skaplig trea i Malmö centrum",
-                    Description = "Med våra moderna ljudisolerade fönster hör du inget av det blodiga gängkring som just nu skördar liv i Malmös innerstad"
+                    Description = "Med våra modernt ljudisolerade fönster hör du inget av det blodiga gängkring som just nu skördar liv i Malmös innerstad"
                 });
 
         }
