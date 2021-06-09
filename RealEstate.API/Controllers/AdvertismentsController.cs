@@ -42,10 +42,25 @@ namespace RealEstate.API.Controllers
         public IActionResult GetAdvertisment(Guid id)
         {
             var advertisment = _repositoryAccess.Advertisment.GetAdvertisment(id, trackChanges: false);
+            var property = _repositoryAccess.Property.GetProperty(advertisment.PropertyId, trackChanges: false);
 
             if(advertisment != null)
             {
-                var advertismentDto = _mapper.Map<AdvertismentsDto>(advertisment);
+                var advertismentDto = new AdvertismentDto
+                {
+                    CreatedOn = advertisment.CreatedOn,
+                    ConstructionYear = property.YearOfConstruction,
+                    Address = property.Address,
+                    PropertyType = advertisment.PropertyType,
+                    Description = advertisment.Description,
+                    Id = advertisment.Id,
+                    Title = advertisment.Title,
+                    SellingPrice = advertisment.SellingPrice,
+                    RentingPrice = advertisment.RentingPrice,
+                    CanBeSold = advertisment.CanBeSold,
+                    CanBeRented = advertisment.CanBeRented
+                };
+
                 return Ok(advertismentDto);
             }
             else
@@ -55,18 +70,18 @@ namespace RealEstate.API.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPost]
-        public IActionResult CreateAdvertisment([FromBody] AdvertismentCreationDto advertisment)
-        {
-            
-        }
+        //[Authorize]
+        //[HttpPost]
+        //public IActionResult CreateAdvertisment([FromBody] AdvertismentCreationDto advertisment)
+        //{
+           
+        //}
 
-        [HttpGet("SkipTake")]
-        [AllowAnonymous]
-        public async Task<ActionResult> RetrieveAdvertismentSkipTake(Guid id)
-        {
+        //[HttpGet("SkipTake")]
+        //[AllowAnonymous]
+        //public async Task<ActionResult> RetrieveAdvertismentSkipTake(Guid id)
+        //{
             
-        }
+        //}
     }
 }

@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace Entities.DataTransferObjects
 {
-    public class AdvertismentDTO
+    public class AdvertismentDto
     {
-        public Guid Id { get; set; }
         public DateTime CreatedOn { get; set; }
         public int ConstructionYear { get; set; }
-        public string Description { get; set; }
+        public string Address { get; set; }
         public PropertyType PropertyType { get; set; }
+        public string Description { get; set; }
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public int SellingPrice { get; set; }
         public int RentingPrice { get; set; }

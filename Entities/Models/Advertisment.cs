@@ -30,7 +30,7 @@ namespace Entities.Models
         [Required(ErrorMessage = ("Please enter a valid advertisment type for this advertisment."))]
         public bool CanBeSold { get; set; }
         public bool CanBeRented { get; set; }
-        public int PropertyId { get; set; }
+        public Guid PropertyId { get; set; }
         public Property Property { get; set; }
     }
 }

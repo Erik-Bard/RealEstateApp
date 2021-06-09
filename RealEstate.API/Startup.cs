@@ -40,6 +40,7 @@ namespace RealEstate.API
             services.ConfigureRepositoryManager();
             services.AddAutoMapper(typeof(Startup));
 
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
