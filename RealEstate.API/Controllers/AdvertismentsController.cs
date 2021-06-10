@@ -42,7 +42,20 @@ namespace RealEstate.API.Controllers
         public IActionResult GetAdvertisment(Guid id)
         {
             var advertisment = _repositoryAccess.Advertisment.GetAdvertisment(id, trackChanges: false);
+
+            if (advertisment == null)
+            {
+                _logger.Error("advertisment is null, check id or if it doesnt exist.");
+                return NotFound("Advertisement object is null");
+            }
+
             var property = _repositoryAccess.Property.GetProperty(advertisment.PropertyId, trackChanges: false);
+
+            if (property == null)
+            {
+                _logger.Error("Property entity returned null, check id or if it doesnt exist.");
+                return BadRequest("Property is null");
+            }
 
             if(advertisment != null)
             {
