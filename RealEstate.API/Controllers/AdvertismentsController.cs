@@ -109,8 +109,9 @@ namespace RealEstate.API.Controllers
 
             var returnModel = _mapper.Map<AdvertismentResponseDto>(advertismentEntity);
 
-            return Ok(returnModel);
-
+            return CreatedAtRoute("AdvertismentById",
+                new { id = returnModel.Id },
+                returnModel);
         }
 
         //[HttpGet("SkipTake")]
