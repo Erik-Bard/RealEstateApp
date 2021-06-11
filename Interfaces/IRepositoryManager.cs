@@ -9,6 +9,7 @@ namespace Interfaces
     public interface IRepositoryManager
     {
         IPropertyRepository Property { get; }
+        IAdvertismentRepository Advertisment { get; }
         void Save();
     }
 }

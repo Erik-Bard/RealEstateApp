@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace RealEstate.API.Controllers
 {
-    [Route("api/RealEstates")]
+    [Route("api/Properties")]
     [ApiController]
     public class PropertiesController : ControllerBase
     {
