@@ -38,7 +38,7 @@ namespace RealEstate.API.Extensions
             modelBuilder.Entity<Advertisment>().HasData(
                 new Advertisment
                 {
-                    Id = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
+                    Id = new Guid("bb9935ca-5f28-4db1-96a0-4c5a1e3cc692"),
                     Title = "Vacker tvåa på Sveavägen",
                     Description = "Välkomna till denna vackra lägenhet i centrala Stockholm med två sovrum och stort kök",
                     CreatedOn = DateTime.Now,
@@ -53,7 +53,7 @@ namespace RealEstate.API.Extensions
                 },
                 new Advertisment
                 {
-                    Id = new Guid("78591990-5d89-4aa5-aaed-345505bdd1c3"),
+                    Id = new Guid("bb628a76-25b3-451d-9998-d2406ef6e4b7"),
                     Title = "Rymlig etta mitt i Göteborg",
                     Description = "Njut av kvällssolen på den fina balkongen i denna fina och ytsmarta lägenhet i hjärtat av Göteborg",
                     CreatedOn = DateTime.Now,
@@ -67,7 +67,7 @@ namespace RealEstate.API.Extensions
                 },
                 new Advertisment
                 {
-                    Id = new Guid("7e6d5379-9f9e-4bf6-9744-7623008c943e"),
+                    Id = new Guid("eff86b15-4872-4c8d-ac32-bf351fb71a2c"),
                     Title = "Skaplig trea i Malmö centrum",
                     Description = "Med våra modernt ljudisolerade fönster hör du inget av det blodiga gängkring som just nu skördar liv i Malmös innerstad",
                     CreatedOn = DateTime.Now,
@@ -83,21 +83,21 @@ namespace RealEstate.API.Extensions
             modelBuilder.Entity<Comment>().HasData(
                 new Comment
                 {
-                    Id = new Guid("7e5d5379-9f9e-4bf6-9744-7623008c998d"),
+                    Id = new Guid("3c41ead4-07f5-45a7-95d9-b719b50664be"),
                     CreatedOn = DateTime.Now,
                     PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
                     Content = "Dålig utsikt!!",
                 },
                 new Comment
                 {
-                    Id = new Guid("78591990-5d89-4aa5-aaed-345505bdd1c3"),
+                    Id = new Guid("bd805341-886b-4c82-b00c-86a93139793b"),
                     CreatedOn = DateTime.Now,
                     PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
                     Content = "Väldigt fint läge.",
                 },
                 new Comment
                 {
-                    Id = new Guid("7e6d5379-9f9e-4bf6-9744-7623008c943e"),
+                    Id = new Guid("3ed2d9cc-295d-4e46-a7fb-6d698cd36975"),
                     CreatedOn = DateTime.Now,
                     PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
                     Content = "Bra pris.",
