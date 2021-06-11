@@ -40,7 +40,6 @@ namespace RealEstate.API
             services.ConfigureRepositoryManager();
             services.AddAutoMapper(typeof(Startup));
 
-
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
@@ -51,20 +50,6 @@ namespace RealEstate.API
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
                 {
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnTokenValidated = context =>
-                        {
-                            // get user from database and check if authorized.
-                            var userMachine = context.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
-                            var user = userMachine.GetUserAsync(context.HttpContext.User);
-                            if (user == null)
-                            {
-                                context.Fail("Unauthorized");
-                            }
-                            return Task.CompletedTask;
-                        }
-                    };
                     options.SaveToken = true;
                     options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = new TokenValidationParameters()
@@ -77,7 +62,12 @@ namespace RealEstate.API
                     };
                 });
 
-            services.AddControllers();
+            services.AddControllers(setupAction =>
+            {
+                setupAction.ReturnHttpNotAcceptable = true;
+
+            }).AddXmlDataContractSerializerFormatters();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealEstate.API", Version = "v1" });
@@ -91,7 +81,7 @@ namespace RealEstate.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RealEstate.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RealEstate.API"));
             }
 
             app.UseHttpsRedirection();
