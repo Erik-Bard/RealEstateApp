@@ -11,6 +11,7 @@ namespace Entities.Models
 {
     public class Advertisment
     {
+       
         public Guid Id { get; set; }
         [MinLength(5)]
         [MaxLength(50)]

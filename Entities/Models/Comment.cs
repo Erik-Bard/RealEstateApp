@@ -13,6 +13,5 @@ namespace Entities.Models
         public Guid PropertyId { get; set; }
         public Property Property { get; set; }
         public string Content { get; set; }
-
     }
 }
