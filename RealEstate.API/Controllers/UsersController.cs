@@ -42,6 +42,10 @@ namespace RealEstate.API.Controllers
         {
             var user = _userRepository.UserRepository.GetUser(username, trackChanges: false);
             user = _userRepository.UserRepository.PopulateRatingsLists(user);
+            if (user == null)
+            {
+                return BadRequest("User doesnt exist.");
+            }
             var usersTotalRating = RatingExtensionHelpers.AverageRating(user.MyRatings);
             var usersTotalRealEstates = user.RealEstates.Count();
             //var usersTotalComments = user.TotalComments.Count();
