@@ -1,6 +1,7 @@
 using Entities;
 using IdentityLibrary;
 using IdentityLibrary.Authentication;
+using Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace RealEstate.API
                 try
                 {
                     var services = scope.ServiceProvider;
-                    var UserContext = services.GetRequiredService<ApplicationDbContext>();
+                    ApplicationDbContext UserContext = services.GetRequiredService<ApplicationDbContext>();
                     RepositoryContext hotelContext = scope.ServiceProvider.GetService<RepositoryContext>();
                     //If database doesent exist, run the seeder
                     bool DatabaseDoesNotExist = hotelContext.Database.EnsureCreated();
@@ -35,6 +36,11 @@ namespace RealEstate.API
                         UserContext.Database.Migrate();
                         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                        var repository = services.GetRequiredService<IUserManagerRepository>();
+                        UsersSeeder seeder = new UsersSeeder(repository, roleManager, userManager, UserContext);
+                        seeder.AdminUserSeeder();
+                        seeder.StandardUserSeeder();
+                        seeder.SeedFromSqlScript();
                     }
                 }
                 catch (Exception ex)

@@ -1,4 +1,5 @@
 ﻿using Entities;
+using IdentityLibrary;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,6 +18,7 @@ namespace Repository
         public RepositoryBase(RepositoryContext repositoryContext)
         {
             this._repositoryContext = repositoryContext;
+            
         }
 
         public void Create(T entity) => _repositoryContext.Set<T>().Add(entity);

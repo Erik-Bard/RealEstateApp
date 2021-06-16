@@ -27,6 +27,9 @@ namespace RealEstate.API.Extensions
         public static void ConfigureRepositoryManager(this IServiceCollection services) =>
             services.AddScoped<IRepositoryManager, RepositoryManager>();
 
+        public static void ConfigureIdentityRepositoryManager(this IServiceCollection services) =>
+            services.AddScoped<IUserManagerRepository, UserManagerRepository>();
+
         public static void ConfigureIdentityDbSqlConnection(this IServiceCollection services,
             IConfiguration configuration) =>
                 services.AddDbContext<ApplicationDbContext>(opt =>

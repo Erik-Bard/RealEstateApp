@@ -1,5 +1,6 @@
 using IdentityLibrary;
 using IdentityLibrary.Authentication;
+using IdentityLibrary.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RealEstate.API.Extensions;
+using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +26,9 @@ namespace RealEstate.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+
+        public Startup(
+            IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -40,11 +44,15 @@ namespace RealEstate.API
             services.ConfigureLoggerService();
             services.ConfigureIdentityDbSqlConnection(Configuration);
             services.ConfigureRepositoryManager();
+            services.ConfigureIdentityRepositoryManager();
             services.AddAutoMapper(typeof(Startup));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
+
+            var key = Encoding.ASCII.GetBytes(Configuration.GetValue<string>("TokenKey"));
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -52,15 +60,27 @@ namespace RealEstate.API
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
                 {
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                        {
+                            var userService = context.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
+                            var user = userService.GetUserAsync(context.HttpContext.User);
+                            if (user == null)
+                            {
+                                context.Fail("Login failed, see details.");
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                     options.SaveToken = true;
                     options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = new TokenValidationParameters()
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidAudience = Configuration["JWT:ValidAudience"],
-                        ValidIssuer = Configuration["JWT:ValidIssuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuerSigningKey = true,
                     };
                 });
 
@@ -72,6 +92,14 @@ namespace RealEstate.API
 
             services.AddSwaggerGen(c =>
             {
+                c.AddSecurityDefinition("oauth2", new ApiKeyScheme
+                {
+                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+                    In = "header",
+                    Name = "Authorization",
+                    Type = "apiKey"
+                });
+                c.OperationFilter<SecurityRequirementsOperationFilter>();
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealEstate.API", Version = "v1" });
             });
         }
