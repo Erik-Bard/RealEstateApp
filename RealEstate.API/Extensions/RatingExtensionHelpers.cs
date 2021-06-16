@@ -18,8 +18,12 @@ namespace RealEstate.API.Extensions
 
         public static double AverageRating(IEnumerable<Rating> ratings)
         {
-            double average = ((GetAllRatedValues(ratings)).Sum()) / ratings.Count();
-            return average;
+            if (ratings.Count() > 0)
+            {
+                double average = ((GetAllRatedValues(ratings)).Sum()) / ratings.Count();
+                return average;
+            }
+            return 0;
         }
 
         public static List<double> GetAllRatedValues(IEnumerable<Rating> rating)

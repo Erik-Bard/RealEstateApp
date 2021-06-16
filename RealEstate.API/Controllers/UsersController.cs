@@ -47,7 +47,9 @@ namespace RealEstate.API.Controllers
             }
             user = _userRepository.UserRepository.PopulateRatingsLists(user);
             var usersTotalRating = RatingExtensionHelpers.AverageRating(user.MyRatings);
+
             var usersTotalRealEstates = user.RealEstates.Count();
+
             //var usersTotalComments = user.TotalComments.Count();
 
             user.AverageRating = usersTotalRating;
