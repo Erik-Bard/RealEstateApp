@@ -1,4 +1,6 @@
 ﻿using IdentityLibrary.Authentication;
+using IdentityLibrary.Models;
+using IdentityLibrary.Roles;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,7 +18,7 @@ namespace IdentityLibrary
         {
 
         }
-        
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

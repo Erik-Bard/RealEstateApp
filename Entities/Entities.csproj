@@ -17,4 +17,8 @@
     <Folder Include="Extensions\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IdentityLibrary\IdentityLibrary.csproj" />
+  </ItemGroup>
+
 </Project>

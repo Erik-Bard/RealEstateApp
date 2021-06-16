@@ -4,14 +4,16 @@ using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace RealEstate.API.Migrations
+namespace RealEstate.API.Migrations.Repository
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20210615153403_AddedCommentsCollection")]
+    partial class AddedCommentsCollection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,7 +80,7 @@ namespace RealEstate.API.Migrations
                             CanBeRented = true,
                             CanBeSold = false,
                             Contact = "0888-888-888",
-                            CreatedOn = new DateTime(2021, 6, 16, 15, 1, 4, 787, DateTimeKind.Local).AddTicks(3861),
+                            CreatedOn = new DateTime(2021, 6, 15, 17, 34, 3, 88, DateTimeKind.Local).AddTicks(7784),
                             Description = "Välkomna till denna vackra lägenhet i centrala Stockholm med två sovrum och stort kök",
                             PropertyId = new Guid("7e6d5379-9f9e-4bf6-9744-7623008c943e"),
                             PropertyType = 1,
@@ -92,7 +94,7 @@ namespace RealEstate.API.Migrations
                             CanBeRented = true,
                             CanBeSold = false,
                             Contact = "0888-888-888",
-                            CreatedOn = new DateTime(2021, 6, 16, 15, 1, 4, 790, DateTimeKind.Local).AddTicks(1820),
+                            CreatedOn = new DateTime(2021, 6, 15, 17, 34, 3, 91, DateTimeKind.Local).AddTicks(515),
                             Description = "Njut av kvällssolen på den fina balkongen i denna fina och ytsmarta lägenhet i hjärtat av Göteborg",
                             PropertyId = new Guid("78591990-5d89-4aa5-aaed-345505bdd1c3"),
                             PropertyType = 3,
@@ -106,7 +108,7 @@ namespace RealEstate.API.Migrations
                             CanBeRented = true,
                             CanBeSold = false,
                             Contact = "0888-888-888",
-                            CreatedOn = new DateTime(2021, 6, 16, 15, 1, 4, 790, DateTimeKind.Local).AddTicks(1862),
+                            CreatedOn = new DateTime(2021, 6, 15, 17, 34, 3, 91, DateTimeKind.Local).AddTicks(549),
                             Description = "Med våra modernt ljudisolerade fönster hör du inget av det blodiga gängkring som just nu skördar liv i Malmös innerstad",
                             PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
                             PropertyType = 2,
@@ -147,21 +149,21 @@ namespace RealEstate.API.Migrations
                         {
                             Id = new Guid("7e5d5379-9f9e-4bf6-9744-7623008c998d"),
                             Content = "Dålig utsikt!!",
-                            CreatedOn = new DateTime(2021, 6, 16, 15, 1, 4, 790, DateTimeKind.Local).AddTicks(2915),
+                            CreatedOn = new DateTime(2021, 6, 15, 17, 34, 3, 91, DateTimeKind.Local).AddTicks(1367),
                             PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada")
                         },
                         new
                         {
                             Id = new Guid("78591990-5d89-4aa5-aaed-345505bdd1c3"),
                             Content = "Väldigt fint läge.",
-                            CreatedOn = new DateTime(2021, 6, 16, 15, 1, 4, 790, DateTimeKind.Local).AddTicks(3638),
+                            CreatedOn = new DateTime(2021, 6, 15, 17, 34, 3, 91, DateTimeKind.Local).AddTicks(2069),
                             PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada")
                         },
                         new
                         {
                             Id = new Guid("7e6d5379-9f9e-4bf6-9744-7623008c943e"),
                             Content = "Bra pris.",
-                            CreatedOn = new DateTime(2021, 6, 16, 15, 1, 4, 790, DateTimeKind.Local).AddTicks(3650),
+                            CreatedOn = new DateTime(2021, 6, 15, 17, 34, 3, 91, DateTimeKind.Local).AddTicks(2083),
                             PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada")
                         });
                 });
@@ -210,20 +212,20 @@ namespace RealEstate.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("UserToWriteAboutId")
+                    b.Property<string>("AboutId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Value")
                         .HasColumnType("int");
 
-                    b.Property<string>("WrittenByUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserToWriteAboutId");
+                    b.HasIndex("AboutId");
 
-                    b.HasIndex("WrittenByUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Ratings");
                 });
@@ -233,8 +235,8 @@ namespace RealEstate.API.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("AverageRating")
-                        .HasColumnType("float");
+                    b.Property<int>("AverageRating")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -291,19 +293,19 @@ namespace RealEstate.API.Migrations
 
             modelBuilder.Entity("Entities.Models.Rating", b =>
                 {
-                    b.HasOne("Entities.Models.User", "UserToWriteAbout")
+                    b.HasOne("Entities.Models.User", "AboutUser")
                         .WithMany("MyRatings")
-                        .HasForeignKey("UserToWriteAboutId")
+                        .HasForeignKey("AboutId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Entities.Models.User", "WrittenByUser")
+                    b.HasOne("Entities.Models.User", "ByUser")
                         .WithMany("RatingsDoneByMe")
-                        .HasForeignKey("WrittenByUserId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.Navigation("UserToWriteAbout");
+                    b.Navigation("AboutUser");
 
-                    b.Navigation("WrittenByUser");
+                    b.Navigation("ByUser");
                 });
 
             modelBuilder.Entity("Entities.Models.Property", b =>
