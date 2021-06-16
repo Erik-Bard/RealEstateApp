@@ -39,6 +39,7 @@ namespace RealEstate.API.Controllers
         }
 
         [HttpGet("{id}", Name = "AdvertismentById")]
+        [AllowAnonymous]
         public IActionResult GetAdvertisment(Guid id)
         {
             var advertisment = _repositoryAccess.Advertisment.GetAdvertisment(id, trackChanges: false);
@@ -75,6 +76,56 @@ namespace RealEstate.API.Controllers
                 };
 
                 return Ok(advertismentDto);
+            }
+            else
+            {
+                _logger.Info($"Advertisment id: {id} was not found.");
+                return NotFound();
+            }
+        }
+
+        [HttpGet()]
+        [Route("privateId")]
+        [Authorize]
+        public IActionResult GetAdvertismentPrivate(Guid id)
+        {
+            var advertisment = _repositoryAccess.Advertisment.GetAdvertisment(id, trackChanges: false);
+
+            if (advertisment == null)
+            {
+                _logger.Error("advertisment is null, check id or if it doesnt exist.");
+                return NotFound("Advertisement object is null");
+            }
+
+            var property = _repositoryAccess.Property.GetProperty(advertisment.PropertyId, trackChanges: false);
+
+            if (property == null)
+            {
+                _logger.Error("Property entity returned null, check id or if it doesnt exist.");
+                return BadRequest("Property is null");
+            }
+
+            if (advertisment != null)
+            {
+                var advertismentPrivateDto = new AdvertisementPrivateDto
+                {
+                    CreatedOn = advertisment.CreatedOn,
+                    ConstructionYear = property.YearOfConstruction,
+                    Address = property.Address,
+                    PropertyType = advertisment.PropertyType,
+                    Description = advertisment.Description,
+                    Id = advertisment.Id,
+                    Title = advertisment.Title,
+                    SellingPrice = advertisment.SellingPrice,
+                    RentingPrice = advertisment.RentingPrice,
+                    CanBeSold = advertisment.CanBeSold,
+                    CanBeRented = advertisment.CanBeRented,
+                    Contact = advertisment.Contact,
+                    Comments = advertisment.Comments
+                };
+
+
+                return Ok(advertismentPrivateDto);
             }
             else
             {
