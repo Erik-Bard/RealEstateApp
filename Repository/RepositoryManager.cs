@@ -13,6 +13,7 @@ namespace Repository
         private RepositoryContext _repositoryContext;
         private PropertyRepository _propertyRepository;
         private AdvertismentRepository _advertismentRepository;
+        private CommentRepository _commentRepository;
 
         public RepositoryManager(RepositoryContext repositoryContext)
         {
@@ -39,6 +40,18 @@ namespace Repository
                     _advertismentRepository = new AdvertismentRepository(_repositoryContext);
                 }
                 return _advertismentRepository;
+            }
+        }
+
+        public ICommentRepository Comment
+        {
+            get
+            {
+                if (_commentRepository == null)
+                {
+                    _commentRepository = new CommentRepository(_repositoryContext);
+                }
+                return _commentRepository;
             }
         }
 

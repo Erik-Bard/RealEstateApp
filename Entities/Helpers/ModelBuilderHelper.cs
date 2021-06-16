@@ -83,23 +83,23 @@ namespace RealEstate.API.Extensions
             modelBuilder.Entity<Comment>().HasData(
                 new Comment
                 {
-                    Id = new Guid("3c41ead4-07f5-45a7-95d9-b719b50664be"),
+                    Id = new Guid("c30141ec-acfa-4a5f-8869-c1fedcc410be"),
                     CreatedOn = DateTime.Now,
-                    PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
+                    AdvertismentId = new Guid("bb9935ca-5f28-4db1-96a0-4c5a1e3cc692"),
                     Content = "Dålig utsikt!!",
                 },
                 new Comment
                 {
-                    Id = new Guid("bd805341-886b-4c82-b00c-86a93139793b"),
+                    Id = new Guid("b2aa2881-9021-4d91-88ff-8f452dccc105"),
                     CreatedOn = DateTime.Now,
-                    PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
+                    AdvertismentId = new Guid("bb628a76-25b3-451d-9998-d2406ef6e4b7"),
                     Content = "Väldigt fint läge.",
                 },
                 new Comment
                 {
-                    Id = new Guid("3ed2d9cc-295d-4e46-a7fb-6d698cd36975"),
+                    Id = new Guid("acbcb3d5-64e2-420b-93c7-99d3435377f9"),
                     CreatedOn = DateTime.Now,
-                    PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada"),
+                    AdvertismentId = new Guid("eff86b15-4872-4c8d-ac32-bf351fb71a2c"),
                     Content = "Bra pris.",
                 });
 

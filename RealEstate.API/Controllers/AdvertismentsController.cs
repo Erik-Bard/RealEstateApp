@@ -126,7 +126,7 @@ namespace RealEstate.API.Controllers
             if (take == default)
                 take = 10;
 
-            // Order result list by createdOn
+            // Order ads list by createdOn
             ads = ads.OrderByDescending(e => e.CreatedOn);
 
             // Skip Take Result
