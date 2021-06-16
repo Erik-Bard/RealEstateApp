@@ -41,6 +41,14 @@ namespace RealEstate.API.Profiles
                     dest.WrittenByUserId,
                     opt => opt.MapFrom(src => src.GetUserById));
 
+            CreateMap<UserRatingDto, RatingDto>()
+                .ForMember(dest =>
+                    dest.UserId,
+                    opt => opt.MapFrom(src => src.UserId))
+                .ForMember(dest =>
+                    dest.Value,
+                    opt => opt.MapFrom(src => src.Value));
+
             CreateMap<ApplicationUser, User>()
                 .ForMember(dest =>
                     dest.UserId,

@@ -71,15 +71,21 @@ namespace RealEstate.API.Controllers
 
         [HttpPut("rate")]
         [Authorize]
-        public IActionResult Rate([FromBody] UserRatingDto userRatingDto)
+        public IActionResult Rate([FromBody] RatingDto ratingDto)
         {
-            var ratingParse = int.Parse(userRatingDto.Value);
-            var user = _userRepository.UserRepository.GetUserByGuid(userRatingDto.UserId, false);
+            var ratingParse = int.Parse(ratingDto.Value);
+            var user = _userRepository.UserRepository.GetUserByGuid(ratingDto.UserId, false);
             var getLoggedInUsername = HttpContext.User.Identity.Name.ToString();
             var userLoggedIn = _userRepository.UserRepository.GetUser(getLoggedInUsername, false);
 
-            userRatingDto.GetUserById = userLoggedIn.UserId;
-            userRatingDto.AboutId = user.UserId;
+            UserRatingDto userRatingDto = new UserRatingDto
+            {
+                GetUserById = userLoggedIn.UserId,
+                AboutId = user.UserId,
+                UserId = ratingDto.UserId,
+                Value = ratingDto.Value
+            };
+
             
             user = _userRepository.UserRepository.PopulateRatingsLists(user);
 
