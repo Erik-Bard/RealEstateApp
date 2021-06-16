@@ -16,6 +16,7 @@ namespace RealEstate.API.Profiles
             CreateMap<AdvertismentCreationDto, Advertisment>();
             CreateMap<Advertisment, AdvertismentResponseDto>();
             CreateMap<AdvertismentCreationDto, Property>();
+            CreateMap<Advertisment, AdvertisementPrivateDto>();
         }
     }
 }
