@@ -12,6 +12,7 @@ namespace Entities.Models
         public DateTime CreatedOn { get; set; }
         public Guid AdvertismentId { get; set; }
         public Advertisment Advertisment { get; set; }
+        public string UserId { get; set; }
         public string Content { get; set; }
-    }
+        }
 }

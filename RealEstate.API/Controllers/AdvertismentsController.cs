@@ -40,7 +40,7 @@ namespace RealEstate.API.Controllers
 
         [HttpGet("{id}", Name = "AdvertismentById")]
         [AllowAnonymous]
-        public IActionResult GetAdvertisment(Guid id)
+        public IActionResult GetAdvertismentById(Guid id)
         {
             var advertisment = _repositoryAccess.Advertisment.GetAdvertisment(id, trackChanges: false);
 
@@ -85,8 +85,8 @@ namespace RealEstate.API.Controllers
         }
 
         [HttpGet()]
-        [Route("privateId")]
-        [Authorize]
+        [Route("Id")]
+        //[Authorize]
         public IActionResult GetAdvertismentPrivate(Guid id)
         {
             var advertisment = _repositoryAccess.Advertisment.GetAdvertisment(id, trackChanges: false);
@@ -105,10 +105,12 @@ namespace RealEstate.API.Controllers
                 return BadRequest("Property is null");
             }
 
+
             if (advertisment != null)
             {
                 var advertismentPrivateDto = new AdvertisementPrivateDto
                 {
+                    
                     CreatedOn = advertisment.CreatedOn,
                     ConstructionYear = property.YearOfConstruction,
                     Address = property.Address,
@@ -181,13 +183,13 @@ namespace RealEstate.API.Controllers
             ads = ads.OrderByDescending(e => e.CreatedOn);
 
             // Skip Take Result
-            var result = ads.Skip(skip).Take(take);
+            ads = ads.Skip(skip).Take(take);
 
 
             List<AdvertismentResponseDto> responseList = new List<AdvertismentResponseDto>();
 
             //Add Mapped Objects to responseList
-            foreach (var item in result)
+            foreach (var item in ads)
             {
                 var returnEntity = _mapper.Map<AdvertismentResponseDto>(item);
 

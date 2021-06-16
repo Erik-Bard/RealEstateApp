@@ -11,6 +11,9 @@ namespace Interfaces
     {
         IEnumerable<Comment> GetAllComments(bool trackChanges);
 
+        IEnumerable<Comment> GetCommentsByAdvertisment(bool trackChanges, Guid advertismentId);
+        IEnumerable<Comment> GetCommentsByUserId(bool trackChanges, string userId);
+
         void CreateComment(Comment comment);
     }
 }

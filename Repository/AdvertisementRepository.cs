@@ -25,7 +25,8 @@ namespace Repository
 
         public Advertisment GetAdvertisment(Guid advertisementId, bool trackChanges) =>
             FindByCondition(c => c.Id.Equals(advertisementId), trackChanges)
-                .SingleOrDefault();
+                .FirstOrDefault();
+                
 
         public void CreateAdvertisment(Advertisment advertisment) =>
             Create(advertisment);
