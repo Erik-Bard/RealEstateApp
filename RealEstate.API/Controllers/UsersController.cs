@@ -41,11 +41,11 @@ namespace RealEstate.API.Controllers
         public IActionResult GetUsers(string username)
         {
             var user = _userRepository.UserRepository.GetUser(username, trackChanges: false);
-            user = _userRepository.UserRepository.PopulateRatingsLists(user);
             if (user == null)
             {
                 return BadRequest("User doesnt exist.");
             }
+            user = _userRepository.UserRepository.PopulateRatingsLists(user);
             var usersTotalRating = RatingExtensionHelpers.AverageRating(user.MyRatings);
             var usersTotalRealEstates = user.RealEstates.Count();
             //var usersTotalComments = user.TotalComments.Count();

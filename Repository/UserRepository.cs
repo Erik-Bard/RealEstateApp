@@ -47,10 +47,7 @@ namespace Repository
         {
             var query = (from e in _dbContext.Ratings
                          select e).ToList();
-            if (user == null)
-            {
-                return null;
-            }
+
             if (user.MyRatings.Count() == 0)
             {
                 foreach (var rating in query)
