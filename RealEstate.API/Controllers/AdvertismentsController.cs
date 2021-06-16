@@ -83,7 +83,7 @@ namespace RealEstate.API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public IActionResult CreateAdvertisment([FromBody] AdvertismentCreationDto advertisment)
         {
@@ -114,11 +114,37 @@ namespace RealEstate.API.Controllers
                 returnModel);
         }
 
-        //[HttpGet("SkipTake")]
-        //[AllowAnonymous]
-        //public async Task<ActionResult> RetrieveAdvertismentSkipTake(Guid id)
-        //{
+        [HttpGet("SkipTake")]
+        [AllowAnonymous]
+        public IActionResult RetrieveAdvertismentSkipTake(int skip, int take)
+        {
+            var ads  = _repositoryAccess.Advertisment.GetAllAdvertisments(trackChanges: false);
 
-        //}
+            if (skip == default)
+                skip = 0;
+
+            if (take == default)
+                take = 10;
+
+            // Order ads list by createdOn
+            ads = ads.OrderByDescending(e => e.CreatedOn);
+
+            // Skip Take Result
+            var result = ads.Skip(skip).Take(take);
+
+
+            List<AdvertismentResponseDto> responseList = new List<AdvertismentResponseDto>();
+
+            //Add Mapped Objects to responseList
+            foreach (var item in result)
+            {
+                var returnEntity = _mapper.Map<AdvertismentResponseDto>(item);
+
+                responseList.Add(returnEntity);
+
+            }
+
+            return Ok(responseList);
+        }
     }
 }

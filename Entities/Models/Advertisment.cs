@@ -11,6 +11,7 @@ namespace Entities.Models
 {
     public class Advertisment
     {
+       
         public Guid Id { get; set; }
         [MinLength(5)]
         [MaxLength(50)]
@@ -32,5 +33,6 @@ namespace Entities.Models
         public bool CanBeRented { get; set; }
         public Guid PropertyId { get; set; }
         public Property Property { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

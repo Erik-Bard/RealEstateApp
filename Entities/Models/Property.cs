@@ -17,6 +17,5 @@ namespace Entities.Models
         [Required(ErrorMessage = "An address is required for this property.")]
         public string Address { get; set; }
         public Advertisment Advertisment { get; set; }       
-        public List<Comment> Comments { get; set; }
     }
 }

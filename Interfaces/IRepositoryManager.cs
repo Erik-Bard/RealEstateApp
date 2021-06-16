@@ -10,6 +10,7 @@ namespace Interfaces
     {
         IPropertyRepository Property { get; }
         IAdvertismentRepository Advertisment { get; }
+        ICommentRepository Comment { get;  }
         void Save();
     }
 }

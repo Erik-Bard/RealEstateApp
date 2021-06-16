@@ -10,9 +10,8 @@ namespace Entities.Models
     {
         public Guid Id { get; set; }
         public DateTime CreatedOn { get; set; }
-        public Guid PropertyId { get; set; }
-        public Property Property { get; set; }
+        public Guid AdvertismentId { get; set; }
+        public Advertisment Advertisment { get; set; }
         public string Content { get; set; }
-
     }
 }
