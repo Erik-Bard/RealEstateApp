@@ -13,6 +13,5 @@ namespace Entities.Models
         public Guid AdvertismentId { get; set; }
         public Advertisment Advertisment { get; set; }
         public string Content { get; set; }
-
     }
 }
