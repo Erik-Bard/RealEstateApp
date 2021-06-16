@@ -51,7 +51,7 @@ namespace RealEstate.API.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult CreateComment(CommentCreationDto comment)
+        public IActionResult CreateComment([FromBody] CommentCreationDto comment)
         {
             if (comment == null)
             {
