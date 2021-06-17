@@ -105,6 +105,7 @@ namespace RealEstate.API.Controllers
                 return BadRequest("Property is null");
             }
 
+            var comments = _repositoryAccess.Comment.GetCommentsByAdvertisment(false, advertisment.Id).ToList();
 
             if (advertisment != null)
             {
@@ -123,7 +124,7 @@ namespace RealEstate.API.Controllers
                     CanBeSold = advertisment.CanBeSold,
                     CanBeRented = advertisment.CanBeRented,
                     Contact = advertisment.Contact,
-                    Comments = advertisment.Comments
+                    Comments = comments
                 };
 
 
