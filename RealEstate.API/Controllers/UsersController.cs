@@ -36,9 +36,20 @@ namespace RealEstate.API.Controllers
             this._repositoryManager = repositoryManager;
         }
 
-        // Add Get Total Real Estates to retrieved User,
-        // add total comments,
-        // add Calculate Average Rating for this User
+        /// <summary>
+        /// Get an existing User and its status.
+        /// </summary>
+        /// <remarks>
+        /// Get an Existing User and its status.
+        /// 
+        ///     GET/{username}
+        ///     {
+        ///         "username" : "KalleKalas"
+        ///     }
+        ///     
+        /// </remarks>
+        /// <param name="username"></param>
+        /// <returns></returns>
         [HttpGet("{username}")]
         [AllowAnonymous]
         public IActionResult GetUsers(string username)
@@ -75,6 +86,25 @@ namespace RealEstate.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Create/Post a rating about a User, requires Login.
+        /// </summary>
+        /// <remarks>
+        /// Create/Post a new Rating about a User.
+        /// 
+        /// This requires you to be logged in to use.
+        /// 
+        /// Must provide an existing user's Id in {userId} to use.
+        /// 
+        ///     Post/rate
+        ///     {
+        ///         "userId" : "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        ///         "value" : "Går att lita på. Låga priser, bra deals."
+        ///     }
+        ///     
+        /// </remarks>
+        /// <param name="ratingDto"></param>
+        /// <returns></returns>
         [HttpPut("rate")]
         [Authorize]
         public IActionResult Rate([FromBody] RatingDto ratingDto)

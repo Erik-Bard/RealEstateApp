@@ -12,13 +12,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RealEstate.API.Extensions;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +29,15 @@ namespace RealEstate.API
 {
     public class Startup
     {
+        static string xmlFilePath
+        {
+            get
+            {
+                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                var fileName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name + ".xml";
+                return Path.Combine(basePath, fileName);
+            }
+        }
 
         public Startup(
             IConfiguration configuration)
@@ -101,6 +113,7 @@ namespace RealEstate.API
                 });
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealEstate.API", Version = "v1" });
+                c.IncludeXmlComments(xmlFilePath);
             });
         }
 
