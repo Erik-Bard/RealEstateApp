@@ -13,7 +13,13 @@ namespace RealEstate.API.Profiles
         public CommentProfile()
         {
             CreateMap<CommentCreationDto, Comment>();
-
+            CreateMap<Comment, CommentResponseDto>()
+                .ForMember(dest =>
+                    dest.Content,
+                        opt => opt.MapFrom(c => c.Content))
+                .ForMember(dest =>
+                    dest.CreatedOn,
+                        opt => opt.MapFrom(c => c.CreatedOn));
         }
     }
 }

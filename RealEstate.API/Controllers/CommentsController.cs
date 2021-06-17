@@ -67,7 +67,7 @@ namespace RealEstate.API.Controllers
 
             var comments = _repositoryAccess.Comment.GetCommentsByAdvertisment(false, id);
 
-            if (comments == null)
+            if (comments.Count() <= 0 || comments == null)
             {
                 _logger.Error("Request to get Comments returned Null value.");
                 return NotFound("Comments returned Null");
@@ -75,7 +75,32 @@ namespace RealEstate.API.Controllers
 
             comments = comments.Skip(skip).Take(take);
 
-            return Ok(comments);
+            var listOfComments = comments.ToList();
+
+            List<CommentResponseDto> commentResponsesDtos = new List<CommentResponseDto>();
+
+            CommentResponseDto CommentDto = new CommentResponseDto();
+
+            foreach (var comment in listOfComments)
+            {
+
+                var guid = new Guid(comment.UserId);
+                var user = _userRepository.UserRepository.GetUserByGuid(guid, false);
+                if (user == null)
+                {
+                    _logger.Error("User wanted to retrieve doesnt exist in db");
+                    return NotFound("User doesnt exist");
+                }
+                CommentResponseDto CommentEntity = new CommentResponseDto
+                {
+                    Content = comment.Content,
+                    UserName = user.UserName,
+                    CreatedOn = comment.CreatedOn
+                };
+                commentResponsesDtos.Add(CommentEntity);
+            }
+
+            return Ok(commentResponsesDtos.OrderBy(x => x.CreatedOn));
 
         }
 
@@ -167,17 +192,39 @@ namespace RealEstate.API.Controllers
 
             var user = _userRepository.UserRepository.GetUser(userName, false);
 
+            if (user == null)
+            {
+                _logger.Error("User wanted to retrieve doesnt exist in db");
+                return NotFound("User doesnt exist");
+            }
+
             var comments = _repositoryAccess.Comment.GetCommentsByUserId(false, user.UserId);
 
-            if (comments == null)
+            if (comments.Count() <= 0 || comments == null)
             {
                 _logger.Error("Request to get Comments returned Null value.");
                 return NotFound("Comments returned Null");
             }
 
             comments = comments.Skip(skip).Take(take);
+            var listOfComments = comments.ToList();
 
-            return Ok(comments);
+            List<CommentResponseDto> commentResponsesDtos = new List<CommentResponseDto>();
+
+            CommentResponseDto CommentDto = new CommentResponseDto();
+
+            foreach (var comment in listOfComments)
+            {
+                CommentResponseDto CommentEntity = new CommentResponseDto
+                {
+                    Content = comment.Content,
+                    UserName = user.UserName,
+                    CreatedOn = comment.CreatedOn
+                };
+                commentResponsesDtos.Add(CommentEntity);
+            }
+
+            return Ok(commentResponsesDtos.OrderBy(x => x.CreatedOn));
 
         }
 
@@ -219,8 +266,24 @@ namespace RealEstate.API.Controllers
                 return NotFound("Comments returned Null");
             }
 
-            return Ok(comments.OrderBy(x => x.CreatedOn));
+            var listOfComments = comments.ToList();
 
+            List<CommentResponseDto> commentResponsesDtos = new List<CommentResponseDto>();
+
+            CommentResponseDto CommentDto = new CommentResponseDto();
+
+            foreach (var comment in listOfComments)
+            {
+                CommentResponseDto CommentEntity = new CommentResponseDto
+                {
+                    Content = comment.Content,
+                    UserName = user.UserName,
+                    CreatedOn = comment.CreatedOn
+                };
+                commentResponsesDtos.Add(CommentEntity);
+            }
+
+            return Ok(commentResponsesDtos.OrderBy(x => x.CreatedOn));
         }
     }
 }

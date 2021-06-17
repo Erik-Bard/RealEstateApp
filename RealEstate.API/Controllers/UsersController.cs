@@ -58,7 +58,8 @@ namespace RealEstate.API.Controllers
 
             if (user == null)
             {
-                return NotFound("User doesnt exist.");
+                _logger.Info("Client tried to query user=null or invalid username syntax");
+                return NotFound("User doesnt exist or Invalid username-syntax");
             }
 
             user = _userRepository.UserRepository.PopulateRatingsLists(user);

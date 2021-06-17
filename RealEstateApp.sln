@@ -17,13 +17,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerServices", "LoggerSer
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Postman", "Postman", "{B8EA7DE0-E2BB-46B7-A35D-7B48461BDEB1}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\natem\OneDrive\Skrivbord\RealEstateRequests.postman_collection.json = ..\..\..\..\natem\OneDrive\Skrivbord\RealEstateRequests.postman_collection.json
+		C:\Users\natem\OneDrive\Skrivbord\RealEstateRequests.postman_collection.json = C:\Users\natem\OneDrive\Skrivbord\RealEstateRequests.postman_collection.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4CC81A51-9986-4D7E-815A-BC42BA64AAB6}"
 	ProjectSection(SolutionItems) = preProject
 		SeedUsersScript.sql = SeedUsersScript.sql
 	EndProjectSection
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrönaFastigheter", "..\..\..\OneDrive\Skrivbord\Backend\Web API\Gr-naFastigheter-master\GrönaFastigheter\GrönaFastigheter.csproj", "{30B39141-854A-4A3B-B32C-B097DDE9942D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntitiesFrontend", "..\..\..\OneDrive\Skrivbord\Backend\Web API\Gr-naFastigheter-master\Entities\EntitiesFrontend.csproj", "{B68D27D2-78AE-4C69-BCAA-2F0D447FED77}"
