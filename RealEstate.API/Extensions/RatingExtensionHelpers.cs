@@ -57,19 +57,5 @@ namespace RealEstate.API.Extensions
             }
             return checkSpam;
         }
-
-        public static void NewListIfNull(User user)
-        {
-            if (user.MyRatings == null)
-            {
-                user.MyRatings = new List<Rating>();
-            }
-            if (user.RatingsDoneByMe == null)
-            {
-                user.RatingsDoneByMe = new List<Rating>();
-            }
-        }
-
-        
     }
 }

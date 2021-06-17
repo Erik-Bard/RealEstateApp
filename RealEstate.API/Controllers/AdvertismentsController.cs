@@ -33,6 +33,12 @@ namespace RealEstate.API.Controllers
         {
             var advertisments = _repositoryAccess.Advertisment.GetAllAdvertisments(trackChanges: false);
 
+            if (advertisments == null)
+            {
+                _logger.Error("advertisment is null, check id or if it doesnt exist.");
+                return NotFound("Advertisement object is null");
+            }
+
             var advertismentsDto = _mapper.Map<IEnumerable<AdvertismentsDto>>(advertisments);
 
             return Ok(advertismentsDto);
@@ -55,7 +61,7 @@ namespace RealEstate.API.Controllers
             if (property == null)
             {
                 _logger.Error("Property entity returned null, check id or if it doesnt exist.");
-                return BadRequest("Property is null");
+                return NotFound("Property is null");
             }
 
             if(advertisment != null)
@@ -102,7 +108,7 @@ namespace RealEstate.API.Controllers
             if (property == null)
             {
                 _logger.Error("Property entity returned null, check id or if it doesnt exist.");
-                return BadRequest("Property is null");
+                return NotFound("Property is null");
             }
 
 
@@ -140,10 +146,16 @@ namespace RealEstate.API.Controllers
         [HttpPost]
         public IActionResult CreateAdvertisment([FromBody] AdvertismentCreationDto advertisment)
         {
-            if(advertisment == null)
+            if (!ModelState.IsValid)
+            {
+                _logger.Error($"Invalid modelstate of: {ModelState}");
+                return UnprocessableEntity(ModelState);
+            }
+
+            if (advertisment == null)
             {
                 _logger.Error("Object is null");
-                return BadRequest("Object Is Null.");
+                return NotFound("Object Is Null.");
             }
 
             // Add the property to db
@@ -172,6 +184,12 @@ namespace RealEstate.API.Controllers
         public IActionResult RetrieveAdvertismentSkipTake(int skip, int take)
         {
             var ads  = _repositoryAccess.Advertisment.GetAllAdvertisments(trackChanges: false);
+
+            if (ads == null)
+            {
+                _logger.Error("advertisment is null, check id or if it doesnt exist.");
+                return NotFound("Advertisement object is null");
+            }
 
             if (skip == default)
                 skip = 0;

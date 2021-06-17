@@ -23,14 +23,17 @@ namespace RealEstate.API.Controllers
         private readonly IMapper _mapper;
         private readonly ILoggerManager _logger;
         private readonly IUserManagerRepository _userRepository;
+        private readonly IRepositoryManager _repositoryManager;
 
         public UsersController(ILoggerManager logger,
             IMapper mapper,
-            IUserManagerRepository userRepository)
+            IUserManagerRepository userRepository,
+            IRepositoryManager repositoryManager)
         {
             this._mapper = mapper;
             this._logger = logger;
             this._userRepository = userRepository;
+            this._repositoryManager = repositoryManager;
         }
 
         // Add Get Total Real Estates to retrieved User,
@@ -41,20 +44,23 @@ namespace RealEstate.API.Controllers
         public IActionResult GetUsers(string username)
         {
             var user = _userRepository.UserRepository.GetUser(username, trackChanges: false);
+
             if (user == null)
             {
-                return BadRequest("User doesnt exist.");
+                return NotFound("User doesnt exist.");
             }
+
             user = _userRepository.UserRepository.PopulateRatingsLists(user);
             var usersTotalRating = RatingExtensionHelpers.AverageRating(user.MyRatings);
+            var userComments = _repositoryManager.Comment.GetCommentsByUserId(false, user.UserId);
 
             var usersTotalRealEstates = user.RealEstates.Count();
 
-            //var usersTotalComments = user.TotalComments.Count();
+            var usersTotalComments = userComments.Count();
 
             user.AverageRating = usersTotalRating;
             user.TotalRealEstates = usersTotalRealEstates;
-            //user.TotalComments = usersTotalComments;
+            user.TotalComments = usersTotalComments;
 
             var userEntity = _mapper.Map<UserDto>(user);
 
@@ -73,10 +79,22 @@ namespace RealEstate.API.Controllers
         [Authorize]
         public IActionResult Rate([FromBody] RatingDto ratingDto)
         {
+            if (!ModelState.IsValid)
+            {
+                _logger.Error($"Invalid modelstate of: {ModelState}");
+                return UnprocessableEntity(ModelState);
+            }
+
             var ratingParse = int.Parse(ratingDto.Value);
             var user = _userRepository.UserRepository.GetUserByGuid(ratingDto.UserId, false);
             var getLoggedInUsername = HttpContext.User.Identity.Name.ToString();
             var userLoggedIn = _userRepository.UserRepository.GetUser(getLoggedInUsername, false);
+
+            if(user == null)
+            {
+                _logger.Error("user is null");
+                return NotFound("User is null");
+            }
 
             UserRatingDto userRatingDto = new UserRatingDto
             {
