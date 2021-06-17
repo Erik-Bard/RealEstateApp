@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Entities;
 using Entities.EnumHelpers;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ namespace RealEstate.API.Extensions
 {
     public static class ModelBuilderHelper
     {
-
+        private static readonly RepositoryContext repositoryContext;
         //Seed Data
         public static void Seed(this ModelBuilder modelBuilder)
         {

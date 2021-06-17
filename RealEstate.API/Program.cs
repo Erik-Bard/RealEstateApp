@@ -28,9 +28,9 @@ namespace RealEstate.API
                 {
                     var services = scope.ServiceProvider;
                     ApplicationDbContext UserContext = services.GetRequiredService<ApplicationDbContext>();
-                    RepositoryContext hotelContext = scope.ServiceProvider.GetService<RepositoryContext>();
+                    RepositoryContext dbContext = scope.ServiceProvider.GetService<RepositoryContext>();
                     //If database doesent exist, run the seeder
-                    bool DatabaseDoesNotExist = hotelContext.Database.EnsureCreated();
+                    bool DatabaseDoesNotExist = dbContext.Database.EnsureCreated();
                     if (!UserContext.Database.EnsureCreated())
                     {
                         UserContext.Database.Migrate();
@@ -41,6 +41,8 @@ namespace RealEstate.API
                         seeder.AdminUserSeeder();
                         seeder.StandardUserSeeder();
                         seeder.SeedFromSqlScript();
+                        CommentSeeder commentSeeder = new CommentSeeder(dbContext);
+                        commentSeeder.CommentsSeeder();
                     }
                 }
                 catch (Exception ex)
