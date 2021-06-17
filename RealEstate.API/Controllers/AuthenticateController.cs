@@ -53,51 +53,23 @@ namespace RealEstate.API.Controllers
             this._signInManager = signInManager;
         }
 
-        [HttpPost]
-        [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                _logger.Error($"Invalid modelstate of: {ModelState}");
-                return UnprocessableEntity(ModelState);
-            }
-
-            var user = await userManager.FindByNameAsync(model.Username);
-            if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
-            {
-                var userRoles = await userManager.GetRolesAsync(user);
-
-                var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }
-
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-                var token = new JwtSecurityToken(
-                    issuer: _configuration["JWT:ValidIssuer"],
-                    audience: _configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddHours(3),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                    );
-
-                return Ok(new
-                {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
-                });
-            }
-            return Unauthorized();
-        }
-
+        /// <summary>
+        /// Register as a new User
+        /// </summary>
+        /// <remarks>
+        /// Example Schema of how to register as a new user:
+        /// 
+        ///     Post/register
+        ///     {
+        ///         "username" : "KalleKalas",
+        ///         "email" : "kalle@mail.com",
+        ///         "password" : "Pwd#123",
+        ///         "confirmPassword" : "Pwd#123"
+        ///     }
+        ///     
+        /// </remarks>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
@@ -143,6 +115,22 @@ namespace RealEstate.API.Controllers
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
 
+        /// <summary>
+        /// Register as an admin user, [NOTE] Yet to come in later versions :)
+        /// </summary>
+        /// <remarks>
+        /// Example Schema
+        ///     
+        ///     Post/register-admin
+        ///     {
+        ///          "username": "KalleKalas",
+        ///          "email": "kalle@mail.com",
+        ///          "password": "Pwd#123",
+        ///          "confirmPassword": "Pwd#123"
+        ///     }
+        /// </remarks>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
@@ -199,7 +187,27 @@ namespace RealEstate.API.Controllers
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
 
-        [HttpPost("token")]
+        /// <summary>
+        /// Get Token to Login with
+        /// </summary>
+        /// <remarks>
+        /// IMPORTANT: Leave grant_type empty ! ! !
+        /// 
+        /// Example Schema, Must be an already existing User: 
+        /// 
+        ///     Post/token
+        ///     {
+        ///         "username" : "KalleKalas",
+        ///         "password" : "Pwd#123"
+        ///     }
+        ///     
+        /// Then Copy the token string and use as a bearer authorization.
+        /// </remarks>
+        /// <param name="loginModel"></param>
+        /// <param name="grant_type"></param>
+        /// <returns></returns>
+        [HttpPost()]
+        [Route("/token")]
         [AllowAnonymous]
         public async Task<ActionResult> GetToken([FromForm] LoginModel loginModel, string grant_type)
         {

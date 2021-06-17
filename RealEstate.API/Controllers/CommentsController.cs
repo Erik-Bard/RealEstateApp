@@ -30,8 +30,27 @@ namespace RealEstate.API.Controllers
             this._userRepository = userRepository;
         }
 
-        [HttpGet("ByRealEstate", Name = "CommentById")]
-        [AllowAnonymous]
+        /// <summary>
+        /// Get Comments for a RealEstate
+        /// </summary>
+        /// <remarks>
+        /// Retrieve Comments written about a RealEstate,
+        /// Provide a Valid RealEstate's Id
+        /// 
+        ///     Get/ByRealEstate
+        ///     {
+        ///         "id" : "b5c1ffaa-a41d-40f2-b59c-c9611dea7b70",
+        ///         "skip" : "2",
+        ///         "take" : "5"
+        ///     }
+        /// 
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <returns></returns>
+        [HttpGet("/ID", Name = "CommentById")]
+        [Authorize]
         public IActionResult RetriveCommentsByRealEstate(Guid id, int skip, int take)
         {
             if (skip == default)
@@ -39,6 +58,12 @@ namespace RealEstate.API.Controllers
 
             if (take == default)
                 take = 10;
+
+            if (take > 100)
+            {
+                _logger.Warning("User tried to use Take paging action above 100.");
+                return BadRequest("Cannot provide Take paging request above 100.");
+            }
 
             var comments = _repositoryAccess.Comment.GetCommentsByAdvertisment(false, id);
 
@@ -54,6 +79,22 @@ namespace RealEstate.API.Controllers
 
         }
 
+        /// <summary>
+        /// Create/Send/Make a new comment
+        /// </summary>
+        /// <remarks>
+        /// New Comment with a valid Advertisement's Id
+        /// Example Schema:
+        /// 
+        ///     Post/Comments
+        ///     {
+        ///         "AdvertismentId" : "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        ///         "Content" : "Jättefin lägenhet med bra utsikt över Kungsparken!"
+        ///     }
+        /// 
+        /// </remarks>
+        /// <param name="comment"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost]
         public IActionResult CreateComment([FromBody] CommentCreationDto comment)
@@ -89,8 +130,27 @@ namespace RealEstate.API.Controllers
         }
 
 
-        [HttpGet("ByUser")]
-        [AllowAnonymous]
+        /// <summary>
+        /// Get Comments by a User, with Skip and Take paging actions
+        /// </summary>
+        /// <remarks>
+        /// Retrieve Comments written,
+        /// Provide an existing User's Username.
+        /// 
+        ///     Get/ByUser
+        ///     {
+        ///         "userName" : "KalleKalas",
+        ///         "skip" : "2",
+        ///         "take" : "5"
+        ///     }
+        /// 
+        /// </remarks>
+        /// <param name="userName"></param>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <returns></returns>
+        [HttpGet("ByUser/USERNAME/SkipTake")]
+        [Authorize]
         public IActionResult RetriveCommentsSkipTakeByUser(string userName, int skip, int take)
         {
             if (skip == default)
@@ -98,6 +158,12 @@ namespace RealEstate.API.Controllers
 
             if (take == default)
                 take = 10;
+
+            if (take > 100)
+            {
+                _logger.Warning("User tried to use Take paging action above 100.");
+                return BadRequest("Cannot provide Take paging request above 100.");
+            }
 
             var user = _userRepository.UserRepository.GetUser(userName, false);
 
@@ -115,6 +181,46 @@ namespace RealEstate.API.Controllers
 
         }
 
+        /// <summary>
+        /// Get a User and their comments in descending order after CreatedOn date.
+        /// </summary>
+        /// <remarks>
+        /// Provide an existing User's username and get back its comments.
+        /// 
+        /// Example Schema:
+        /// 
+        ///     Get/ByUser/Username
+        ///     {
+        ///         "username" : "KalleKalas"
+        ///     }
+        ///     
+        /// </remarks>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        [HttpGet("ByUser/USERNAME")]
+        [Authorize]
+        public IActionResult GetCommentsByUserUsername(string userName)
+        {
+            int skip = 0;
+            int take = 0;
 
+            if (skip == default)
+                skip = 0;
+
+            if (take == default)
+                take = 10;
+
+            var user = _userRepository.UserRepository.GetUser(userName, false);
+            var comments = _repositoryAccess.Comment.GetCommentsByUserId(false, user.UserId);
+
+            if (comments.Count() <= 0 || comments == null)
+            {
+                _logger.Error("Request to get Comments returned Null value.");
+                return NotFound("Comments returned Null");
+            }
+
+            return Ok(comments.OrderBy(x => x.CreatedOn));
+
+        }
     }
 }

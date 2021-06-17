@@ -1,0 +1,326 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RealEstate.API</name>
+    </assembly>
+    <members>
+        <member name="M:RealEstate.API.Controllers.AdvertismentsController.GetAdvertisments">
+            <summary>
+            Get all Advertisements
+            </summary>
+            <remarks>
+            Simple HttpGet call to retrieve all Advertisements
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.AdvertismentsController.GetAdvertismentById(System.Guid)">
+            <summary>
+            Get an Advertisement
+            </summary>
+            <remarks>
+            Example values | Schema:
+                
+                Get/RealEstates/{id}
+                {
+                    "id" : "e5c390d8-effd-4fff-8b5c-171ed66a09b5"
+                }
+            
+            </remarks>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.AdvertismentsController.GetAdvertismentPrivate(System.Guid)">
+            <summary>
+            Get Advertisement and Comments, Require Login.
+            </summary>
+            <remarks>
+            Example values | Schema:
+                
+                Get/RealEstates/{Id}
+                {
+                    "id" : "e5c390d8-effd-4fff-8b5c-171ed66a09b5"
+                }
+            
+            </remarks>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.AdvertismentsController.CreateAdvertisment(Entities.DataTransferObjects.AdvertismentCreationDto)">
+            <summary>
+            Create a new Advertisement for a RealEstate
+            </summary>
+            <remarks>
+            You must be logged in to perform this.
+            Example values | Schema:
+            
+                Post /RealEstates
+                {
+                    "title" : "Fin etta på Lindholmen",
+                    "description" : "Fin etta på Lindholmen i ett grönt och fint område. Väldigt barnvänligt och bra koppling med lokaltrafiken.",
+                    "contact" : "0551-1523-124-125",
+                    "yearOfConstruction": 2020,
+                     "sellingPrice": 10000,
+                     "rentingPrice": 100,
+                     "propertyType": 1
+                }
+                
+            </remarks>
+            <param name="advertisment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.AdvertismentsController.RetrieveAdvertismentSkipTake(System.Int32,System.Int32)">
+            <summary>
+            Request Pager from X page to Z
+            </summary>
+            <remarks>
+            Example values | Schema:
+            
+                Get /SkipTake
+                {
+                    "Skip" : 2,
+                    "Take" : 5
+                }
+            
+            </remarks>
+            <param name="skip"></param>
+            <param name="take"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.AuthenticateController.Register(IdentityLibrary.Models.RegisterModel)">
+            <summary>
+            Register as a new User
+            </summary>
+            <remarks>
+            Example Schema of how to register as a new user:
+            
+                Post/register
+                {
+                    "username" : "KalleKalas",
+                    "email" : "kalle@mail.com",
+                    "password" : "Pwd#123",
+                    "confirmPassword" : "Pwd#123"
+                }
+                
+            </remarks>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.AuthenticateController.RegisterAdmin(IdentityLibrary.Models.RegisterModel)">
+            <summary>
+            Register as an admin user, [NOTE] Yet to come in later versions :)
+            </summary>
+            <remarks>
+            Example Schema
+                
+                Post/register-admin
+                {
+                     "username": "KalleKalas",
+                     "email": "kalle@mail.com",
+                     "password": "Pwd#123",
+                     "confirmPassword": "Pwd#123"
+                }
+            </remarks>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.AuthenticateController.GetToken(IdentityLibrary.Models.LoginModel,System.String)">
+            <summary>
+            Get Token to Login with
+            </summary>
+            <remarks>
+            IMPORTANT: Leave grant_type empty ! ! !
+            
+            Example Schema, Must be an already existing User: 
+            
+                Post/token
+                {
+                    "username" : "KalleKalas",
+                    "password" : "Pwd#123"
+                }
+                
+            Then Copy the token string and use as a bearer authorization.
+            </remarks>
+            <param name="loginModel"></param>
+            <param name="grant_type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.CommentController.RetriveCommentsByRealEstate(System.Guid,System.Int32,System.Int32)">
+            <summary>
+            Get Comments for a RealEstate
+            </summary>
+            <remarks>
+            Retrieve Comments written about a RealEstate,
+            Provide a Valid RealEstate's Id
+            
+                Get/ByRealEstate
+                {
+                    "id" : "b5c1ffaa-a41d-40f2-b59c-c9611dea7b70",
+                    "skip" : "2",
+                    "take" : "5"
+                }
+            
+            </remarks>
+            <param name="id"></param>
+            <param name="skip"></param>
+            <param name="take"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.CommentController.CreateComment(Entities.DataTransferObjects.CommentCreationDto)">
+            <summary>
+            Create/Send/Make a new comment
+            </summary>
+            <remarks>
+            New Comment with a valid Advertisement's Id
+            Example Schema:
+            
+                Post/Comments
+                {
+                    "AdvertismentId" : "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "Content" : "Jättefin lägenhet med bra utsikt över Kungsparken!"
+                }
+            
+            </remarks>
+            <param name="comment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.CommentController.RetriveCommentsSkipTakeByUser(System.String,System.Int32,System.Int32)">
+            <summary>
+            Get Comments by a User, with Skip and Take paging actions
+            </summary>
+            <remarks>
+            Retrieve Comments written,
+            Provide an existing User's Username.
+            
+                Get/ByUser
+                {
+                    "userName" : "KalleKalas",
+                    "skip" : "2",
+                    "take" : "5"
+                }
+            
+            </remarks>
+            <param name="userName"></param>
+            <param name="skip"></param>
+            <param name="take"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.CommentController.GetCommentsByUserUsername(System.String)">
+            <summary>
+            Get a User and their comments in descending order after CreatedOn date.
+            </summary>
+            <remarks>
+            Provide an existing User's username and get back its comments.
+            
+            Example Schema:
+            
+                Get/ByUser/Username
+                {
+                    "username" : "KalleKalas"
+                }
+                
+            </remarks>
+            <param name="userName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.PropertiesController.GetProperties">
+            <summary>
+            Retrieve all properties
+            </summary>
+            <remarks>
+            Remember, Properties ARE NOT the same thing as Advertisement/RealEstates.
+            Properties are the buildings themself and not the full sale advertisement
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.PropertiesController.GetPropertiesById(System.Guid)">
+            <summary>
+            Get A Property by an Id
+            </summary>
+            <remarks>
+            Retrieve a Property by supplying a valid Id for that property.
+            
+            Example Schema:
+            
+                Get/{id}
+                {
+                    "id" : "c38d946f-8f03-4634-af86-c518ded8989f"
+                }
+            
+            </remarks>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.PropertiesController.CreatePropertyAd(Entities.DataTransferObjects.PropertyCreationDto)">
+            <summary>
+            Create/Post a new Property
+            </summary>
+            <remarks>
+            Creating/Posting a new property so that it might be used to be sold in an advertisement.
+            
+            Example Schema:
+            
+                Post/Properties
+                {
+                    "constructionYear" : 2020,
+                    "address" : "420 Björkvägen 69A"
+                }
+            
+            </remarks>
+            <param name="property"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.PropertiesController.RetrievePropertiesSkipTake(System.Guid)">
+            <summary>
+            Retrieve Properties with Paging
+            </summary>
+            <remarks>
+            Retrieve 1 or more Properties with Paging supplying an Id.
+            
+                Get/SkipTake
+                {
+                    "id" : "c38d946f-8f03-4634-af86-c518ded8989f"
+                }
+            
+            </remarks>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.UsersController.GetUsers(System.String)">
+            <summary>
+            Get an existing User and its status.
+            </summary>
+            <remarks>
+            Get an Existing User and its status.
+            
+                GET/{username}
+                {
+                    "username" : "KalleKalas"
+                }
+                
+            </remarks>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RealEstate.API.Controllers.UsersController.Rate(Entities.DataTransferObjects.RatingDto)">
+            <summary>
+            Create/Post a rating about a User, requires Login.
+            </summary>
+            <remarks>
+            Create/Post a new Rating about a User.
+            
+            This requires you to be logged in to use.
+            
+            Must provide an existing user's Id in {userId} to use.
+            
+                Post/rate
+                {
+                    "userId" : "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "value" : "Går att lita på. Låga priser, bra deals."
+                }
+                
+            </remarks>
+            <param name="ratingDto"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

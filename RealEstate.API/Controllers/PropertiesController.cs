@@ -27,6 +27,14 @@ namespace RealEstate.API.Controllers
             this._logger = logger;
         }
 
+        /// <summary>
+        /// Retrieve all properties
+        /// </summary>
+        /// <remarks>
+        /// Remember, Properties ARE NOT the same thing as Advertisement/RealEstates.
+        /// Properties are the buildings themself and not the full sale advertisement
+        /// </remarks>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetProperties()
         {
@@ -43,6 +51,22 @@ namespace RealEstate.API.Controllers
             return Ok(propertiesDto);
         }
 
+        /// <summary>
+        /// Get A Property by an Id
+        /// </summary>
+        /// <remarks>
+        /// Retrieve a Property by supplying a valid Id for that property.
+        /// 
+        /// Example Schema:
+        /// 
+        ///     Get/{id}
+        ///     {
+        ///         "id" : "c38d946f-8f03-4634-af86-c518ded8989f"
+        ///     }
+        /// 
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}", Name = "PropertyById")]
         public IActionResult GetPropertiesById(Guid id)
         {
@@ -60,6 +84,23 @@ namespace RealEstate.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Create/Post a new Property
+        /// </summary>
+        /// <remarks>
+        /// Creating/Posting a new property so that it might be used to be sold in an advertisement.
+        /// 
+        /// Example Schema:
+        /// 
+        ///     Post/Properties
+        ///     {
+        ///         "constructionYear" : 2020,
+        ///         "address" : "420 Björkvägen 69A"
+        ///     }
+        /// 
+        /// </remarks>
+        /// <param name="property"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost]
         public IActionResult CreatePropertyAd([FromBody] PropertyCreationDto property)
@@ -88,6 +129,20 @@ namespace RealEstate.API.Controllers
                 propertyToReturn);
         }
 
+        /// <summary>
+        /// Retrieve Properties with Paging
+        /// </summary>
+        /// <remarks>
+        /// Retrieve 1 or more Properties with Paging supplying an Id.
+        /// 
+        ///     Get/SkipTake
+        ///     {
+        ///         "id" : "c38d946f-8f03-4634-af86-c518ded8989f"
+        ///     }
+        /// 
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("SkipTake")]
         [AllowAnonymous]
         public async Task<ActionResult> RetrievePropertiesSkipTake(Guid id)

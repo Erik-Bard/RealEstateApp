@@ -28,6 +28,13 @@ namespace RealEstate.API.Controllers
             this._logger = logger;
         }
 
+        /// <summary>
+        /// Get all Advertisements
+        /// </summary>
+        /// <remarks>
+        /// Simple HttpGet call to retrieve all Advertisements
+        /// </remarks>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetAdvertisments()
         {
@@ -44,6 +51,20 @@ namespace RealEstate.API.Controllers
             return Ok(advertismentsDto);
         }
 
+        /// <summary>
+        /// Get an Advertisement
+        /// </summary>
+        /// <remarks>
+        /// Example values | Schema:
+        ///     
+        ///     Get/RealEstates/{id}
+        ///     {
+        ///         "id" : "e5c390d8-effd-4fff-8b5c-171ed66a09b5"
+        ///     }
+        /// 
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}", Name = "AdvertismentById")]
         [AllowAnonymous]
         public IActionResult GetAdvertismentById(Guid id)
@@ -90,9 +111,23 @@ namespace RealEstate.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Get Advertisement and Comments, Require Login.
+        /// </summary>
+        /// <remarks>
+        /// Example values | Schema:
+        ///     
+        ///     Get/RealEstates/{Id}
+        ///     {
+        ///         "id" : "e5c390d8-effd-4fff-8b5c-171ed66a09b5"
+        ///     }
+        /// 
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet()]
         [Route("Id")]
-        //[Authorize]
+        [Authorize]
         public IActionResult GetAdvertismentPrivate(Guid id)
         {
             var advertisment = _repositoryAccess.Advertisment.GetAdvertisment(id, trackChanges: false);
@@ -143,6 +178,28 @@ namespace RealEstate.API.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Create a new Advertisement for a RealEstate
+        /// </summary>
+        /// <remarks>
+        /// You must be logged in to perform this.
+        /// Example values | Schema:
+        /// 
+        ///     Post /RealEstates
+        ///     {
+        ///         "title" : "Fin etta på Lindholmen",
+        ///         "description" : "Fin etta på Lindholmen i ett grönt och fint område. Väldigt barnvänligt och bra koppling med lokaltrafiken.",
+        ///         "contact" : "0551-1523-124-125",
+        ///         "yearOfConstruction": 2020,
+        ///          "sellingPrice": 10000,
+        ///          "rentingPrice": 100,
+        ///          "propertyType": 1
+        ///     }
+        ///     
+        /// </remarks>
+        /// <param name="advertisment"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost]
         public IActionResult CreateAdvertisment([FromBody] AdvertismentCreationDto advertisment)
@@ -180,6 +237,22 @@ namespace RealEstate.API.Controllers
                 returnModel);
         }
 
+        /// <summary>
+        /// Request Pager from X page to Z
+        /// </summary>
+        /// <remarks>
+        /// Example values | Schema:
+        /// 
+        ///     Get /SkipTake
+        ///     {
+        ///         "Skip" : 2,
+        ///         "Take" : 5
+        ///     }
+        /// 
+        /// </remarks>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <returns></returns>
         [HttpGet("SkipTake")]
         [AllowAnonymous]
         public IActionResult RetrieveAdvertismentSkipTake(int skip, int take)
