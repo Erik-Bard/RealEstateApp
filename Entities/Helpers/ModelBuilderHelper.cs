@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Entities;
 using Entities.EnumHelpers;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ namespace RealEstate.API.Extensions
 {
     public static class ModelBuilderHelper
     {
-
+        private static readonly RepositoryContext repositoryContext;
         //Seed Data
         public static void Seed(this ModelBuilder modelBuilder)
         {
@@ -79,30 +80,6 @@ namespace RealEstate.API.Extensions
                     CanBeSold = false,
                     PropertyId = new Guid("e277bec0-2f9d-40c6-9433-f7c6ecfa7ada")
                 });
-
-            modelBuilder.Entity<Comment>().HasData(
-                new Comment
-                {
-                    Id = new Guid("c30141ec-acfa-4a5f-8869-c1fedcc410be"),
-                    CreatedOn = DateTime.Now,
-                    AdvertismentId = new Guid("bb9935ca-5f28-4db1-96a0-4c5a1e3cc692"),
-                    Content = "Dålig utsikt!!",
-                },
-                new Comment
-                {
-                    Id = new Guid("b2aa2881-9021-4d91-88ff-8f452dccc105"),
-                    CreatedOn = DateTime.Now,
-                    AdvertismentId = new Guid("bb628a76-25b3-451d-9998-d2406ef6e4b7"),
-                    Content = "Väldigt fint läge.",
-                },
-                new Comment
-                {
-                    Id = new Guid("acbcb3d5-64e2-420b-93c7-99d3435377f9"),
-                    CreatedOn = DateTime.Now,
-                    AdvertismentId = new Guid("eff86b15-4872-4c8d-ac32-bf351fb71a2c"),
-                    Content = "Bra pris.",
-                });
-
         }
     }
 }
