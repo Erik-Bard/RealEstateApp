@@ -87,7 +87,10 @@ namespace RealEstate.API.Controllers
 
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+            {
+                _logger.Error("Tried to create a duplicate User!");
+                return BadRequest("Error, User already exists!");
+            }
 
             ApplicationUser user = new ApplicationUser()
             {
