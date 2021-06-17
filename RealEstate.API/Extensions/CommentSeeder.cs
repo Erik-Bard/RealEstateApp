@@ -45,7 +45,7 @@ namespace RealEstate.API.Extensions
                 CreatedOn = DateTime.Now,
                 AdvertismentId = new Guid("eff86b15-4872-4c8d-ac32-bf351fb71a2c"),
                 Content = "Bra pris.",
-                UserId = dbContext.Users.First(x => x.UserName.Contains("TestUser")).UserId
+                UserId = dbContext.Users.First(x => x.UserName.Contains("ErikTester")).UserId
             };
 
             dbContext.Comments.AddRange(comment1, comment2, comment3);

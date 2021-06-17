@@ -55,9 +55,9 @@ namespace RealEstate.API.Extensions
         {
             User user1 = new User()
             {
-                Email = "test@mail.com",
+                Email = "eriktester@mail.com",
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = "TestUser",
+                UserName = "ErikTester",
                 Password = "Password@123",
                 UserId = "e1f482f7-4b7e-4197-acfc-d57cd8e3920e"
             };
