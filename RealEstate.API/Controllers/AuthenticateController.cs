@@ -57,6 +57,12 @@ namespace RealEstate.API.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                _logger.Error($"Invalid modelstate of: {ModelState}");
+                return UnprocessableEntity(ModelState);
+            }
+
             var user = await userManager.FindByNameAsync(model.Username);
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
             {
@@ -96,6 +102,12 @@ namespace RealEstate.API.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                _logger.Error($"Invalid modelstate of: {ModelState}");
+                return UnprocessableEntity(ModelState);
+            }
+
             if (model.Password != model.ConfirmPassword)
             {
                 return BadRequest("Password & ConfirmPassowrd must match");
@@ -135,6 +147,12 @@ namespace RealEstate.API.Controllers
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                _logger.Error($"Invalid modelstate of: {ModelState}");
+                return UnprocessableEntity(ModelState);
+            }
+
             if (model.Password != model.ConfirmPassword)
             {
                 return BadRequest("Password & ConfirmPassowrd must match");

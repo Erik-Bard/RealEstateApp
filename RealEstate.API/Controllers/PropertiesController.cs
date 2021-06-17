@@ -32,6 +32,12 @@ namespace RealEstate.API.Controllers
         {
             var properties = _repositoryAccess.Property.GetAllProperties(trackChanges:false);
 
+            if (properties == null)
+            {
+                _logger.Error("Properties tried to be accessed from database doesnt exist.");
+                return NotFound("Properties doesnt exist in the database");
+            }
+
             var propertiesDto = _mapper.Map<IEnumerable<PropertyDto>>(properties);
 
             return Ok(propertiesDto);
@@ -58,10 +64,16 @@ namespace RealEstate.API.Controllers
         [HttpPost]
         public IActionResult CreatePropertyAd([FromBody] PropertyCreationDto property)
         {
+            if (!ModelState.IsValid)
+            {
+                _logger.Error($"Invalid modelstate of: {ModelState}");
+                return UnprocessableEntity(ModelState);
+            }
+
             if (property == null)
             {
                 _logger.Error("Property object sent from client is Null.");
-                return BadRequest("Object Is Null.");
+                return NotFound("Object Is Null.");
             }
 
             var propertyEntity = _mapper.Map<Property>(property);
@@ -81,6 +93,12 @@ namespace RealEstate.API.Controllers
         public async Task<ActionResult> RetrievePropertiesSkipTake(Guid id)
         {
             var property = _repositoryAccess.Property.GetProperty(id, trackChanges: false);
+
+            if (property == null)
+            {
+                _logger.Error("Property object sent from client is Null.");
+                return NotFound("Object Is Null.");
+            }
 
             await Task.CompletedTask;
 

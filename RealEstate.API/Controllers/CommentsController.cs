@@ -30,11 +30,10 @@ namespace RealEstate.API.Controllers
             this._userRepository = userRepository;
         }
 
-        [HttpGet("ByRealEstate")]
+        [HttpGet("ByRealEstate", Name = "CommentById")]
         [AllowAnonymous]
         public IActionResult RetriveCommentsByRealEstate(Guid id, int skip, int take)
         {
-
             if (skip == default)
                 skip = 0;
 
@@ -42,6 +41,12 @@ namespace RealEstate.API.Controllers
                 take = 10;
 
             var comments = _repositoryAccess.Comment.GetCommentsByAdvertisment(false, id);
+
+            if (comments == null)
+            {
+                _logger.Error("Request to get Comments returned Null value.");
+                return NotFound("Comments returned Null");
+            }
 
             comments = comments.Skip(skip).Take(take);
 
@@ -53,10 +58,16 @@ namespace RealEstate.API.Controllers
         [HttpPost]
         public IActionResult CreateComment([FromBody] CommentCreationDto comment)
         {
+            if (!ModelState.IsValid)
+            {
+                _logger.Error($"Invalid modelstate of: {ModelState}");
+                return UnprocessableEntity(ModelState);
+            }
+
             if (comment == null)
             {
                 _logger.Error("Object is null");
-                return BadRequest("Object Is Null.");
+                return NotFound("Object Is Null.");
             }
 
             var commentEntity = _mapper.Map<Comment>(comment);
@@ -67,8 +78,10 @@ namespace RealEstate.API.Controllers
             
             commentEntity.UserId = userLoggedIn.UserId;
             commentEntity.CreatedOn = DateTime.Now;
+            commentEntity.Id = Guid.NewGuid();
 
             _repositoryAccess.Comment.CreateComment(commentEntity);
+            _repositoryAccess.Save();
 
             return CreatedAtRoute("CommentById",
                 new { id = commentEntity.Id },
@@ -89,6 +102,12 @@ namespace RealEstate.API.Controllers
             var user = _userRepository.UserRepository.GetUser(userName, false);
 
             var comments = _repositoryAccess.Comment.GetCommentsByUserId(false, user.UserId);
+
+            if (comments == null)
+            {
+                _logger.Error("Request to get Comments returned Null value.");
+                return NotFound("Comments returned Null");
+            }
 
             comments = comments.Skip(skip).Take(take);
 
