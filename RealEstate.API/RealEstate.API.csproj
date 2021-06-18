@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\VS\repos\RealEstateApp\RealEstate.API\RealEstate.API.xml</DocumentationFile>
+    <DocumentationFile>RealEstateApp\RealEstate.API\RealEstate.API.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
