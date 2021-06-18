@@ -104,14 +104,27 @@ namespace RealEstate.API
 
             services.AddSwaggerGen(c =>
             {
-                c.AddSecurityDefinition("oauth2", new ApiKeyScheme
+                var openAPISecuritySheme = new OpenApiSecurityScheme
                 {
-                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
-                    In = "header",
+                    Description = "JWT Authorization header using the Bearer scheme. Example: Authorization: Bearer { token}",
                     Name = "Authorization",
-                    Type = "apiKey"
-                });
-                c.OperationFilter<SecurityRequirementsOperationFilter>();
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                };
+
+                c.AddSecurityDefinition("Bearer", openAPISecuritySheme);
+
+                var securityRequirements = new OpenApiSecurityRequirement
+                {
+                    { openAPISecuritySheme, new[]{ "Bearer"} }
+                };
+                c.AddSecurityRequirement(securityRequirements);
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealEstate.API", Version = "v1" });
                 c.IncludeXmlComments(xmlFilePath);
             });
